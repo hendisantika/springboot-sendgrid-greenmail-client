@@ -1,5 +1,6 @@
 package com.hendisantika.exception;
 
+import com.hendisantika.message.MessageInfo;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
