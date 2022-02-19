@@ -7,8 +7,13 @@ import com.hendisantika.message.MessageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,6 +38,19 @@ public class EmailValidatorImpl implements EmailValidator {
         if (!messages.isEmpty()) {
             throw new InvalidEmailEntryException(serviceMessage.mergeMessages(messages),
                     this.serviceMessage.getMessage("INVALID_ENTRIES_EMAIL"));
+        }
+    }
+
+    private void validateRequiredFields(final Object object, final List<MessageInfo> errorList,
+                                        final IMessage message) {
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        final Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object);
+        for (final ConstraintViolation<Object> constraintViolation : constraintViolations) {
+            final MessageInfo mensagem = message.getMessageInfo(constraintViolation.getMessage());
+            errorList.add(mensagem);
         }
     }
 }
