@@ -28,4 +28,8 @@ public class MessageImpl implements IMessage {
         return messageSource.getMessage(key, null, locale);
     }
 
+    @Override
+    public String getMessage(String key) {
+        return get(key);
+    }
 }
