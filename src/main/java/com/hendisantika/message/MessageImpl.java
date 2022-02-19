@@ -3,6 +3,7 @@ package com.hendisantika.message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -48,5 +49,17 @@ public class MessageImpl implements IMessage {
             }
         }
         return new ArrayList<>(errorMap.values());
+    }
+
+    @Override
+    public String getOutputMessage(HttpStatus status) {
+        StringBuilder strBuilder = new StringBuilder();
+        if (status != null) {
+            strBuilder
+                    .append(status.value())
+                    .append(" : ")
+                    .append(get(String.valueOf(status.value())));
+        }
+        return strBuilder.toString();
     }
 }
