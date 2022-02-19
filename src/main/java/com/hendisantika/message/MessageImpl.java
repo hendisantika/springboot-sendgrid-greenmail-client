@@ -5,7 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,5 +36,17 @@ public class MessageImpl implements IMessage {
     @Override
     public MessageInfo getMessageInfo(String key) {
         return new MessageInfo(key, get(key));
+    }
+
+    @Override
+    public List<MessageInfo> mergeMessages(List<MessageInfo> messageList) {
+        Map<String, MessageInfo> errorMap = new HashMap<>();
+        for (MessageInfo serviceMessage : messageList) {
+            String mergedKeyMessage = serviceMessage.getCode() + "-" + serviceMessage.getMessage();
+            if (!errorMap.containsKey(mergedKeyMessage)) {
+                errorMap.put(mergedKeyMessage, serviceMessage);
+            }
+        }
+        return new ArrayList<>(errorMap.values());
     }
 }
