@@ -29,4 +29,10 @@ public class ExceptionController {
         return new ResponseEntity<>(output, ex.getStatus());
     }
 
+    private OutputMessage getStandardOutput(InvalidEmailEntryException ex) {
+        OutputMessage output = new OutputMessage();
+        output.setStatusCode(ex.getStatus().value());
+        output.setMessage(ex.getMessage());
+        return output;
+    }
 }
