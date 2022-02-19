@@ -32,4 +32,9 @@ public class MessageImpl implements IMessage {
     public String getMessage(String key) {
         return get(key);
     }
+
+    @Override
+    public MessageInfo getMessageInfo(String key) {
+        return new MessageInfo(key, get(key));
+    }
 }
