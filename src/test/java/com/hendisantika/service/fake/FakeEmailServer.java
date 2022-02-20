@@ -48,7 +48,7 @@ public class FakeEmailServer {
 
     private FakeMessage getMessage(MimeMessage message) {
         try {
-            return FakeMessageBuilder.of()
+            return FakeMessage.FakeMessageBuilder.of()
                     .from(addressToString(message.getFrom()))
                     .recipients(addressToString(message.getAllRecipients()))
                     .subject(message.getSubject())

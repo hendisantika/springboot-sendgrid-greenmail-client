@@ -1,9 +1,12 @@
 package com.hendisantika.base;
 
+import com.hendisantika.service.fake.FakeMailConfiguration;
 import com.icegreen.greenmail.store.FolderException;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 import io.restassured.RestAssured;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -30,6 +33,8 @@ import org.springframework.util.SocketUtils;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
 @ContextConfiguration(classes = {FakeMailConfiguration.class})
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmailBaseIT {
 
     private static final String USER_PASSWORD = "Sendgrid@123";
