@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by IntelliJ IDEA.
@@ -86,5 +87,14 @@ public class TemplateServiceTest {
         } catch (NoSuchFileException e) {
             throw new TemplateException(e.getMessage(), e);
         }
+    }
+
+    private void mockDependenciesMustache(EmailRequestDTO email) throws Exception {
+        Reader confirmationTemplateString = getConfirmationTemplateString();
+        when(mustacheAutoConfiguration.mustacheTemplateLoader()).thenReturn(loader);
+        when(loader.getTemplate("email-demo-template")).thenReturn(confirmationTemplateString);
+        when(mustacheAutoConfiguration.mustacheCompiler(loader)).thenReturn(mustacheCompiler);
+        when(mustacheCompiler.compile(confirmationTemplateString)).thenReturn(compile);
+        when(compile.execute(email.getTemplateParams())).thenReturn(getTemplateString("result-email-demo-template"));
     }
 }
