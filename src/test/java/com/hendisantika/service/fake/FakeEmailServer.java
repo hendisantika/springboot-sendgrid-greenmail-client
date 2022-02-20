@@ -5,10 +5,7 @@ import com.hendisantika.dto.EmailRequestDTO;
 import com.hendisantika.dto.EmailResponseDTO;
 import org.springframework.stereotype.Component;
 
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
@@ -64,5 +61,10 @@ public class FakeEmailServer {
             return bodyPart.getContent().toString().replaceAll("\\r\\n?", "\n");
         }
         return "";
+    }
+
+    private List<String> addressToString(Address[] from) {
+        return Stream.of(from).map(f -> f.toString())
+                .collect(Collectors.toList());
     }
 }
