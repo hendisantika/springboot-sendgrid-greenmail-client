@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,5 +78,13 @@ public class TemplateServiceTest {
 
     private static Reader getConfirmationTemplateString() throws TemplateException, IOException {
         return new FileReader(new File("src/main/resources/templates/email-demo-template.html"));
+    }
+
+    public static String getTemplateString(String templateName) throws TemplateException, IOException {
+        try {
+            return new String(Files.readAllBytes(Paths.get("src/test/resources/templates/" + templateName + ".html")));
+        } catch (NoSuchFileException e) {
+            throw new TemplateException(e.getMessage(), e);
+        }
     }
 }
