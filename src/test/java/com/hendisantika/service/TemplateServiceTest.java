@@ -1,6 +1,7 @@
 package com.hendisantika.service;
 
 import com.hendisantika.dto.EmailRequestDTO;
+import com.hendisantika.exception.TemplateException;
 import com.samskivert.mustache.Template;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.mustache.MustacheResourceTemplateLoader;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,5 +71,9 @@ public class TemplateServiceTest {
         assertThat(parseTemplateParams).isEqualTo(getTemplateString("result-email-demo-template"));
         assertThat(parseTemplateParams).contains(params.get("name"));
         assertThat(parseTemplateParams).contains(params.get("email"));
+    }
+
+    private static Reader getConfirmationTemplateString() throws TemplateException, IOException {
+        return new FileReader(new File("src/main/resources/templates/email-demo-template.html"));
     }
 }
