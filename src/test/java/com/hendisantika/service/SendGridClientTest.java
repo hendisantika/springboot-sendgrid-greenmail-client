@@ -104,4 +104,15 @@ public class SendGridClientTest {
         verify(sendGrid, atLeastOnce()).api(requestCapture.capture());
         assertThat(throwable).isExactlyInstanceOf(EmailConnectionException.class);
     }
+
+    private EmailRequestDTO createRequestEmail() {
+        String emailTo = "user.test@mail.com";
+        String subject = "E-mail confirmation";
+        return EmailRequestDTO.EmailRequestBuilder.of()
+                .from("server@mail.com")
+                .to(emailTo)
+                .subject(subject)
+                .content("Hello")
+                .build();
+    }
 }
