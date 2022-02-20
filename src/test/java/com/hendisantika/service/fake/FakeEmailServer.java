@@ -6,9 +6,12 @@ import com.hendisantika.dto.EmailResponseDTO;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -66,5 +69,20 @@ public class FakeEmailServer {
     private List<String> addressToString(Address[] from) {
         return Stream.of(from).map(f -> f.toString())
                 .collect(Collectors.toList());
+    }
+
+    private MimeMessage buildMessage(EmailRequestDTO requestEmail) throws Exception {
+        Session session = EmailBaseIT.getGreenMail().getSmtp().createSession();
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(requestEmail.getContent(), MIME_TYPE_HTML);
+        MimeMessage message = new MimeMessage(session);
+        Multipart multiPart = new MimeMultipart("alternative");
+        multiPart.addBodyPart(htmlPart);
+        message.setContent(multiPart);
+        message.setFrom(new InternetAddress());
+        message.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(requestEmail.getTo(), false));
+        message.setSubject(requestEmail.getSubject());
+        message.setSentDate(new Date());
+        return message;
     }
 }
