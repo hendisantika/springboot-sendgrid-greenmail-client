@@ -1,6 +1,8 @@
 package com.hendisantika.config;
 
+import com.sendgrid.SendGrid;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -18,4 +20,9 @@ public class EmailConfig {
 
     @Value("${sendgrid.key}")
     private String sendGridKey;
+
+    @Bean("sendGridService")
+    public SendGrid getSendGridService() {
+        return new SendGrid(sendGridKey);
+    }
 }
