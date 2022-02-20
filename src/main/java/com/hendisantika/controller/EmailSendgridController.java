@@ -1,8 +1,14 @@
 package com.hendisantika.controller;
 
+import com.hendisantika.dto.EmailRequestDTO;
+import com.hendisantika.dto.EmailResponseDTO;
 import com.hendisantika.service.EmailService;
 import com.hendisantika.validator.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,4 +31,12 @@ public class EmailSendgridController {
 
     @Autowired
     private EmailService emailService;
+
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody EmailRequestDTO request)
+            throws Exception {
+        emailValidator.validateEntry(request);
+        EmailResponseDTO response = emailService.sendMail(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
