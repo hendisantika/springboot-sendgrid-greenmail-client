@@ -1,7 +1,14 @@
 package com.hendisantika.service;
 
+import com.hendisantika.dto.EmailRequestDTO;
+import com.hendisantika.exception.TemplateException;
 import com.hendisantika.validator.EmailValidator;
+import org.junit.Before;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,4 +31,14 @@ public class EmailServiceTest {
 
     @Mock
     private EmailValidator emailValidator;
+
+    @Before
+    public void init() throws TemplateException, IOException {
+        MockitoAnnotations.initMocks(this);
+        emailService = new EmailService(emailClientComponent
+                , emailValidator
+                , templateService);
+        Mockito.when(templateService.parseTemplateParams(Mockito.any(EmailRequestDTO.class)))
+                .thenReturn(TemplateServiceTest.getTemplateString("result-email-demo-template"));
+    }
 }
