@@ -1,8 +1,12 @@
 package com.hendisantika.service.fake;
 
 import com.hendisantika.base.EmailBaseIT;
+import com.hendisantika.dto.EmailRequestDTO;
+import com.hendisantika.dto.EmailResponseDTO;
 import org.springframework.stereotype.Component;
 
+import javax.mail.Message;
+import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,5 +33,11 @@ public class FakeEmailServer {
         MimeMessage[] emails = EmailBaseIT.getGreenMail().getReceivedMessages();
         return Stream.of(emails).map(e -> getMessage(e))
                 .collect(Collectors.toList());
+    }
+
+    public EmailResponseDTO send(EmailRequestDTO requestEmail) throws Exception {
+        Message message = buildMessage(requestEmail);
+        Transport.send(message);
+        return buildResponse(requestEmail.getContent());
     }
 }
