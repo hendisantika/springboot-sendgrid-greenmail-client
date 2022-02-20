@@ -50,4 +50,15 @@ public class SendGridClient implements EmailClientComponent {
             throw new EmailConnectionException(e);
         }
     }
+
+    private EmailResponseDTO getResponse(Response response, Request request) {
+        if (response.getBody().isEmpty()) {
+            response.setBody(request.getBody());
+        }
+        return EmailResponseDTO.EmailResponseBuilder.of()
+                .body(response.getBody())
+                .headers(response.getHeaders())
+                .statusCode(response.getStatusCode())
+                .build();
+    }
 }
