@@ -1,6 +1,7 @@
 package com.hendisantika.service;
 
 import com.hendisantika.client.SendGridClient;
+import com.hendisantika.dto.EmailRequestDTO;
 import com.hendisantika.dto.EmailResponseDTO;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +62,29 @@ public class SendGridClientTest {
         assertThat(responseEmail.getBody()).isEqualTo(responseSendGrid.getBody());
         assertThat(responseEmail.getStatusCode()).isEqualTo(STATUS_CODE);
         assertThat(responseEmail.getHeaders()).containsKey("Content-Type");
+        assertThat(request.getEndpoint()).isEqualTo("mail/send");
+        assertThat(request.getMethod().toString()).isEqualTo("POST");
+        assertThat(request.getBody()).isEqualTo("{\"from\":{\"email\":\"server@mail.com\"},"
+                + "\"subject\":\"E-mail confirmation\",\"personalizations\":[{\"to\":[{\"email\":\"user.test@mail.com\"}]}],"
+                + "\"content\":[{\"type\":\"text/html\",\"value\":\"Hello\"}],"
+                + "\"custom_args\":{\"customerAccountNumber\":\"sendGridKey\"}}");
+    }
+
+    @Test
+    public void testReceiveEmail() throws Exception {
+        Response responseSendGrid = new Response();
+        when(sendGrid.api(Mockito.any(Request.class))).thenReturn(responseSendGrid);
+        responseSendGrid.setHeaders(Collections.singletonMap("Content-Type", "application/json"));
+        responseSendGrid.setStatusCode(STATUS_CODE);
+        responseSendGrid.setBody(HTML);
+        EmailRequestDTO requestEmail = createRequestEmail();
+        EmailResponseDTO responseEmail = sendGridClient.send(requestEmail);
+        ArgumentCaptor<Request> requestCapture = ArgumentCaptor.forClass(Request.class);
+        verify(sendGrid, atLeastOnce()).api(requestCapture.capture());
+        Request request = requestCapture.getValue();
+        assertThat(responseEmail.getBody()).isEqualTo(HTML);
+        assertThat(responseEmail.getStatusCode()).isEqualTo(STATUS_CODE);
+        assertThat(responseEmail.getHeaders().containsKey("Content-Type")).isTrue();
         assertThat(request.getEndpoint()).isEqualTo("mail/send");
         assertThat(request.getMethod().toString()).isEqualTo("POST");
         assertThat(request.getBody()).isEqualTo("{\"from\":{\"email\":\"server@mail.com\"},"
