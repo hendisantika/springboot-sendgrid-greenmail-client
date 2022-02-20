@@ -1,6 +1,9 @@
 package com.hendisantika.base;
 
+import com.icegreen.greenmail.store.FolderException;
 import com.icegreen.greenmail.util.GreenMail;
+import io.restassured.RestAssured;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,5 +45,12 @@ public class EmailBaseIT {
 
     public EmailBaseIT(String contextPath) {
         this.contextPath = contextPath;
+    }
+
+    @Before
+    public final void setUpApiAccess() throws FolderException {
+        RestAssured.port = randomPort;
+        RestAssured.basePath = contextPath;
+        getGreenMail().purgeEmailFromAllMailboxes();
     }
 }
