@@ -1,14 +1,18 @@
 package com.hendisantika.service;
 
 import com.hendisantika.dto.EmailRequestDTO;
+import com.hendisantika.dto.EmailResponseDTO;
 import com.hendisantika.exception.TemplateException;
 import com.hendisantika.validator.EmailValidator;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.util.Collections;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,5 +44,23 @@ public class EmailServiceTest {
                 , templateService);
         Mockito.when(templateService.parseTemplateParams(Mockito.any(EmailRequestDTO.class)))
                 .thenReturn(TemplateServiceTest.getTemplateString("result-email-demo-template"));
+    }
+
+    @Test
+    public void whenCallClientThenSendEmail() throws Exception {
+        EmailRequestDTO email = EmailRequestDTO.EmailRequestBuilder.of()
+                .to("john@company.com")
+                .build();
+        Mockito.when(emailClientComponent.send(Mockito.any(EmailRequestDTO.class))).thenReturn(
+                EmailResponseDTO.EmailResponseBuilder.of()
+                        .headers(Collections.singletonMap("a", "b"))
+                        .body("456")
+                        .build());
+        EmailResponseDTO response = emailService.sendMail(email);
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getHeaders()).isEqualTo(Collections.singletonMap("a", "b"));
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(0);
+        Assertions.assertThat(response.getBody()).isEqualTo("456");
+        Mockito.verify(templateService).parseTemplateParams(email);
     }
 }
