@@ -21,4 +21,39 @@ public class FakeMessage {
     private List<String> from;
     private String subject;
 
+    public static final class FakeMessageBuilder {
+        private final FakeMessage fakeMessage;
+
+        private FakeMessageBuilder() {
+            fakeMessage = new FakeMessage();
+        }
+
+        public static FakeMessageBuilder of() {
+            return new FakeMessageBuilder();
+        }
+
+        public FakeMessageBuilder recipients(List<String> recipients) {
+            fakeMessage.setRecipients(recipients);
+            return this;
+        }
+
+        public FakeMessageBuilder content(String content) {
+            fakeMessage.setContent(content);
+            return this;
+        }
+
+        public FakeMessageBuilder from(List<String> from) {
+            fakeMessage.setFrom(from);
+            return this;
+        }
+
+        public FakeMessageBuilder subject(String subject) {
+            fakeMessage.setSubject(subject);
+            return this;
+        }
+
+        public FakeMessage build() {
+            return fakeMessage;
+        }
+    }
 }
