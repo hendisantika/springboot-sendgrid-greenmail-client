@@ -3,6 +3,7 @@ package com.hendisantika.service;
 import com.hendisantika.client.SendGridClient;
 import com.hendisantika.dto.EmailRequestDTO;
 import com.hendisantika.dto.EmailResponseDTO;
+import com.hendisantika.exception.EmailConnectionException;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
@@ -13,11 +14,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.Mockito.*;
 
 /**
@@ -91,5 +94,14 @@ public class SendGridClientTest {
                 + "\"subject\":\"E-mail confirmation\",\"personalizations\":[{\"to\":[{\"email\":\"user.test@mail.com\"}]}],"
                 + "\"content\":[{\"type\":\"text/html\",\"value\":\"Hello\"}],"
                 + "\"custom_args\":{\"customerAccountNumber\":\"sendGridKey\"}}");
+    }
+
+    @Test
+    public void whenSendMailWithInvalidKeyThenReturnEmailException() throws Exception {
+        when(sendGrid.api(Mockito.any(Request.class))).thenThrow(IOException.class);
+        EmailConnectionException throwable = (EmailConnectionException) catchThrowable(() -> sendGridClient.send(createRequestEmail()));
+        ArgumentCaptor<Request> requestCapture = ArgumentCaptor.forClass(Request.class);
+        verify(sendGrid, atLeastOnce()).api(requestCapture.capture());
+        assertThat(throwable).isExactlyInstanceOf(EmailConnectionException.class);
     }
 }
