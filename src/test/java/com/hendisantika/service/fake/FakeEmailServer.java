@@ -3,6 +3,7 @@ package com.hendisantika.service.fake;
 import com.hendisantika.base.EmailBaseIT;
 import com.hendisantika.dto.EmailRequestDTO;
 import com.hendisantika.dto.EmailResponseDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -85,4 +86,11 @@ public class FakeEmailServer {
         message.setSentDate(new Date());
         return message;
     }
+
+    private EmailResponseDTO buildResponse(String content) {
+        return EmailResponseBuilder.of()
+                .statusCode(HttpStatus.OK.value())
+                .body(content).build();
+    }
+
 }
