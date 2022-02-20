@@ -2,6 +2,8 @@ package com.hendisantika.controller;
 
 import com.hendisantika.base.EmailBaseIT;
 import com.hendisantika.service.fake.FakeEmailServer;
+import org.junit.Before;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -19,4 +21,8 @@ public class EmailSendgridControllerIT extends EmailBaseIT {
     @Autowired
     private FakeEmailServer fakeEmailServer;
 
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
 }
