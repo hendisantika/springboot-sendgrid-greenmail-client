@@ -6,8 +6,11 @@ import com.hendisantika.dto.EmailResponseDTO;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,5 +42,18 @@ public class FakeEmailServer {
         Message message = buildMessage(requestEmail);
         Transport.send(message);
         return buildResponse(requestEmail.getContent());
+    }
+
+    private FakeMessage getMessage(MimeMessage message) {
+        try {
+            return FakeMessageBuilder.of()
+                    .from(addressToString(message.getFrom()))
+                    .recipients(addressToString(message.getAllRecipients()))
+                    .subject(message.getSubject())
+                    .content(getContent((MimeMultipart) message.getContent()))
+                    .build();
+        } catch (MessagingException | IOException e) {
+            return null;
+        }
     }
 }
