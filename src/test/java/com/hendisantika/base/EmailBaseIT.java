@@ -2,6 +2,7 @@ package com.hendisantika.base;
 
 import com.icegreen.greenmail.store.FolderException;
 import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
 import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -12,6 +13,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.SocketUtils;
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,5 +54,21 @@ public class EmailBaseIT {
         RestAssured.port = randomPort;
         RestAssured.basePath = contextPath;
         getGreenMail().purgeEmailFromAllMailboxes();
+    }
+
+    public static GreenMail getGreenMail() {
+        if (greenMail == null) {
+            ServerSetup serverSetup = new ServerSetup(
+                    SocketUtils.findAvailableTcpPort(INIT_RANGE_EMAIL_PORT, END_RANGE_EMAIL_PORT),
+                    ServerSetup.getLocalHostAddress(),
+                    ServerSetup.PROTOCOL_SMTP);
+            greenMail = new GreenMail(serverSetup);
+            greenMail.setUser(
+                    EMAIL_USER_ADDRESS,
+                    USER_NAME,
+                    USER_PASSWORD);
+            greenMail.start();
+        }
+        return greenMail;
     }
 }
