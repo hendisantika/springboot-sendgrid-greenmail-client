@@ -88,9 +88,17 @@ public class FakeEmailServer {
     }
 
     private EmailResponseDTO buildResponse(String content) {
-        return EmailResponseBuilder.of()
+        return EmailResponseDTO.EmailResponseBuilder.of()
                 .statusCode(HttpStatus.OK.value())
                 .body(content).build();
     }
 
+    public FakeMessage getEmailFromInbox(String emailAccount) {
+        return getInbox()
+                .stream()
+                .filter(email -> email.getRecipients().size() > 0 && email.getRecipients().get(0).equals(emailAccount))
+                .findFirst()
+                .orElse(null);
+
+    }
 }
