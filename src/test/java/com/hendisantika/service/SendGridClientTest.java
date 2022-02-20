@@ -2,7 +2,9 @@ package com.hendisantika.service;
 
 import com.hendisantika.client.SendGridClient;
 import com.sendgrid.SendGrid;
+import org.junit.Before;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,4 +26,9 @@ public class SendGridClientTest {
     @Mock
     private SendGrid sendGrid;
 
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        sendGridClient = new SendGridClient(sendGrid, "sendGridKey");
+    }
 }
