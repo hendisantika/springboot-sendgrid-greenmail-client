@@ -1,8 +1,10 @@
 package com.hendisantika.service;
 
 import com.samskivert.mustache.Template;
+import org.junit.Before;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.mustache.MustacheResourceTemplateLoader;
 
@@ -31,4 +33,9 @@ public class TemplateServiceTest {
 
     @Mock
     private Template compile;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 }
