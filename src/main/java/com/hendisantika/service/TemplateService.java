@@ -2,10 +2,15 @@ package com.hendisantika.service;
 
 import com.hendisantika.dto.EmailRequestDTO;
 import com.hendisantika.exception.TemplateException;
+import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.MustacheException;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration;
+import org.springframework.boot.autoconfigure.mustache.MustacheEnvironmentCollector;
 import org.springframework.boot.autoconfigure.mustache.MustacheResourceTemplateLoader;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -24,6 +29,8 @@ import java.io.Reader;
 
 @Service("templateService")
 public class TemplateService {
+    @Autowired
+    private Environment environment;
 
     private final MustacheAutoConfiguration mustacheAutoConfiguration;
 
@@ -46,5 +53,20 @@ public class TemplateService {
         } catch (Exception e) {
             throw new TemplateException("GENERIC_ERROR", e);
         }
+    }
+
+    @Bean
+    public Mustache.Compiler mustacheCompiler(
+            Mustache.TemplateLoader templateLoader,
+            Environment environment) {
+
+        MustacheEnvironmentCollector collector
+                = new MustacheEnvironmentCollector();
+        collector.setEnvironment(environment);
+
+        return Mustache.compiler()
+                .defaultValue("Some Default Value")
+                .withLoader(templateLoader)
+                .withCollector(collector);
     }
 }
