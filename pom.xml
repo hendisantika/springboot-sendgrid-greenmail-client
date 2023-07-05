@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.10</version>
+        <version>3.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.hendisantika</groupId>
@@ -14,7 +14,7 @@
     <name>springboot-sendgrid-greenmail-client</name>
     <description>springboot-sendgrid-greenmail-client</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <version.modelmapper>3.0.0</version.modelmapper>
         <version.greenmail>1.6.5</version.greenmail>
         <version.mailapi>1.4.3</version.mailapi>
