@@ -16,7 +16,7 @@
     <properties>
         <java.version>21</java.version>
         <version.modelmapper>3.0.0</version.modelmapper>
-        <version.greenmail>1.6.5</version.greenmail>
+        <version.greenmail>2.1.0</version.greenmail>
         <version.mailapi>1.4.3</version.mailapi>
         <spring.test.version>5.1.4.RELEASE</spring.test.version>
     </properties>
