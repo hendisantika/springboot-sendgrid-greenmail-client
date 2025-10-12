@@ -12,11 +12,13 @@ import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.SocketUtils;
+
+import java.io.IOException;
+import java.net.ServerSocket;
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,7 +66,7 @@ public class EmailBaseIT {
     public static GreenMail getGreenMail() {
         if (greenMail == null) {
             ServerSetup serverSetup = new ServerSetup(
-                    SocketUtils.findAvailableTcpPort(INIT_RANGE_EMAIL_PORT, END_RANGE_EMAIL_PORT),
+                    findAvailableTcpPort(INIT_RANGE_EMAIL_PORT, END_RANGE_EMAIL_PORT),
                     ServerSetup.getLocalHostAddress(),
                     ServerSetup.PROTOCOL_SMTP);
             greenMail = new GreenMail(serverSetup);
@@ -75,5 +77,15 @@ public class EmailBaseIT {
             greenMail.start();
         }
         return greenMail;
+    }
+
+    private static int findAvailableTcpPort(int minPort, int maxPort) {
+        for (int port = minPort; port <= maxPort; port++) {
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
+                return serverSocket.getLocalPort();
+            } catch (IOException ignored) {
+            }
+        }
+        throw new IllegalStateException("No available port found in range [" + minPort + ", " + maxPort + "]");
     }
 }

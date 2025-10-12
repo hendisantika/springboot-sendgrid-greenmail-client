@@ -2,6 +2,7 @@ package com.hendisantika.service;
 
 import com.hendisantika.dto.EmailRequestDTO;
 import com.hendisantika.exception.TemplateException;
+import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class TemplateServiceTest {
     private MustacheResourceTemplateLoader loader;
 
     @Mock
-    private Compiler mustacheCompiler;
+    private Mustache.Compiler mustacheCompiler;
 
     @Mock
     private Template compile;

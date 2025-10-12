@@ -21,7 +21,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,7 +66,7 @@ public class SendGridClientTest {
         Request request = requestCapture.getValue();
         assertThat(responseEmail.getBody()).isEqualTo(responseSendGrid.getBody());
         assertThat(responseEmail.getStatusCode()).isEqualTo(STATUS_CODE);
-        assertThat(responseEmail.getHeaders()).containsKey("Content-Type");
+        assertThat(responseEmail.getHeaders().containsKey("Content-Type")).isTrue();
         assertThat(request.getEndpoint()).isEqualTo("mail/send");
         assertThat(request.getMethod().toString()).isEqualTo("POST");
         assertThat(request.getBody()).isEqualTo("{\"from\":{\"email\":\"server@mail.com\"},"

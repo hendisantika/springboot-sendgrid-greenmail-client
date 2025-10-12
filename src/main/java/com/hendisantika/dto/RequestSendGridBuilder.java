@@ -1,6 +1,11 @@
 package com.hendisantika.dto;
 
-import com.sendgrid.*;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
+import com.sendgrid.helpers.mail.objects.Personalization;
 import lombok.Data;
 
 import java.io.IOException;

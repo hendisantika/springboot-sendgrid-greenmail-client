@@ -7,9 +7,7 @@ import com.samskivert.mustache.MustacheException;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration;
-import org.springframework.boot.autoconfigure.mustache.MustacheEnvironmentCollector;
 import org.springframework.boot.autoconfigure.mustache.MustacheResourceTemplateLoader;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -55,18 +53,13 @@ public class TemplateService {
         }
     }
 
-    @Bean
+    @org.springframework.context.annotation.Bean
     public Mustache.Compiler mustacheCompiler(
             Mustache.TemplateLoader templateLoader,
             Environment environment) {
 
-        MustacheEnvironmentCollector collector
-                = new MustacheEnvironmentCollector();
-        collector.setEnvironment(environment);
-
         return Mustache.compiler()
                 .defaultValue("Some Default Value")
-                .withLoader(templateLoader)
-                .withCollector(collector);
+                .withLoader(templateLoader);
     }
 }
